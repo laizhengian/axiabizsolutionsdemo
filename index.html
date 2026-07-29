@@ -1,0 +1,1861 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AXIA Business Solutions — Engineered Enterprise Infrastructure</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Outfit:wght@300;400;500;600&family=Noto+Sans+SC:wght@300;400;500;700&family=Noto+Sans+Malay:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+  :root {
+    --bg: #EDF1F7;
+    --bg-alt: #E1E7F0;
+    --bg-card: rgba(247, 250, 252, 0.85);
+    --bg-card-solid: #F7FAFC;
+    --ink: #0A1A35;
+    --ink-soft: #334155;
+    --muted: #64748B;
+    --accent: #00529B; /* Exact logo blue */
+    --accent-dark: #003366; /* Darker variant */
+    --accent-light: #2D7AB3; /* Lighter variant */
+    --accent-soft: #E1EDF5; /* Soft tint */
+    --border: rgba(10, 26, 53, 0.1);
+  }
+  
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html { scroll-behavior: smooth; }
+  
+  body {
+    font-family: 'Outfit', 'Noto Sans SC', 'Noto Sans Malay', sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    overflow-x: hidden;
+    cursor: none;
+    line-height: 1.6;
+    word-break: break-word;
+  }
+  
+  /* Global Background Canvas */
+  #network {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw; 
+    height: 100vh;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.35;
+  }
+
+  .content-wrapper {
+    position: relative;
+    z-index: 1;
+  }
+  
+  /* Custom cursor */
+  .cursor-dot, .cursor-outline {
+    pointer-events: none;
+    position: fixed;
+    top: 0; left: 0;
+    transform: translate(-50%, -50%);
+    z-index: 9999;
+    border-radius: 50%;
+    will-change: transform;
+  }
+  .cursor-dot {
+    width: 6px; height: 6px;
+    background: var(--accent);
+    transition: width 0.2s, height 0.2s;
+  }
+  .cursor-outline {
+    width: 36px; height: 36px;
+    border: 1px solid var(--ink);
+    transition: width 0.25s, height 0.25s, background 0.25s, border-color 0.25s;
+  }
+  .cursor-outline.hover {
+    width: 64px; height: 64px;
+    background: rgba(0, 82, 155, 0.08);
+    border-color: var(--accent);
+  }
+  .cursor-dot.hover {
+    width: 0; height: 0;
+  }
+  
+  /* Scroll progress */
+  .scroll-progress {
+    position: fixed;
+    top: 0; left: 0;
+    height: 2px;
+    background: var(--accent);
+    z-index: 9998;
+    width: 0%;
+    transition: width 0.1s;
+  }
+  
+  /* Navigation */
+  .nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 1.25rem 2.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    background: rgba(237, 241, 247, 0.75);
+    border-bottom: 1px solid var(--border);
+    transition: padding 0.3s ease;
+  }
+  .nav.scrolled { padding: 0.85rem 2.5rem; }
+  
+  .nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    text-decoration: none;
+  }
+  .nav-logo-img {
+    height: 42px;
+    width: auto;
+    transition: transform 0.4s;
+  }
+  .nav-logo:hover .nav-logo-img { transform: scale(1.03); }
+  
+  .nav-right {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+  }
+
+  .lang-switcher {
+    display: flex;
+    gap: 0.25rem;
+    background: rgba(10, 26, 53, 0.05);
+    padding: 0.2rem;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+  }
+  .lang-btn {
+    background: transparent;
+    border: none;
+    color: var(--ink-soft);
+    padding: 0.3rem 0.6rem;
+    font-family: 'Chakra Petch', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 600;
+    border-radius: 3px;
+    cursor: none;
+    transition: all 0.3s;
+    text-transform: uppercase;
+  }
+  .lang-btn:hover {
+    color: var(--accent);
+  }
+  .lang-btn.active {
+    background: var(--accent);
+    color: white;
+    box-shadow: 0 2px 8px rgba(0, 82, 155, 0.3);
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 2.5rem;
+    align-items: center;
+  }
+  .nav-link {
+    font-family: 'Chakra Petch', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--ink);
+    text-decoration: none;
+    position: relative;
+    transition: color 0.3s;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: -4px; left: 0;
+    width: 0; height: 1px;
+    background: var(--accent);
+    transition: width 0.3s;
+  }
+  .nav-link:hover::after { width: 100%; }
+  .nav-link:hover { color: var(--accent); }
+  
+  .nav-cta {
+    background: var(--ink);
+    color: var(--bg);
+    padding: 0.65rem 1.5rem;
+    border-radius: 4px;
+    font-family: 'Chakra Petch', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s;
+    border: 1px solid var(--ink);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .nav-cta:hover {
+    background: var(--accent);
+    border-color: var(--accent);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 82, 155, 0.3);
+  }
+  
+  /* Hero */
+  .hero {
+    min-height: 100svh;
+    position: relative;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    padding: 8rem 2.5rem 6rem;
+  }
+  
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 1400px;
+    margin: 0 auto;
+    width: 100%;
+  }
+  
+  .hero-eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--ink-soft);
+    margin-bottom: 2.5rem;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.2s forwards;
+  }
+  .hero-eyebrow::before {
+    content: '';
+    width: 50px; height: 1px;
+    background: var(--accent);
+  }
+  
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  .hero-title {
+    font-family: 'Chakra Petch', sans-serif;
+    font-size: clamp(3.5rem, 11vw, 10rem);
+    line-height: 0.95;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 2.5rem;
+    text-transform: uppercase;
+  }
+  .hero-title .line {
+    display: block;
+    overflow: hidden;
+  }
+  .hero-title .line span {
+    display: inline-block;
+    transform: translateY(110%);
+    animation: slideUp 1s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  }
+  .hero-title .line:nth-child(1) span { animation-delay: 0.3s; }
+  .hero-title .line:nth-child(2) span { animation-delay: 0.45s; }
+  .hero-title .line:nth-child(3) span { animation-delay: 0.6s; }
+  
+  @keyframes slideUp {
+    to { transform: translateY(0); }
+  }
+  
+  .hero-title em {
+    font-family: 'Chakra Petch', sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    color: var(--accent);
+    letter-spacing: -0.02em;
+  }
+  
+  .section-title em {
+    font-style: normal;
+    font-weight: 400;
+    color: var(--accent);
+    letter-spacing: -0.02em;
+  }
+  
+  .hero-subtitle {
+    font-size: 1.35rem; 
+    max-width: 640px;
+    color: var(--ink-soft);
+    line-height: 1.7;
+    margin-bottom: 3rem;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.8s forwards;
+    font-weight: 400;
+    letter-spacing: 0.01em;
+  }
+  
+  /* Marquee */
+  .marquee {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    overflow: hidden;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    background: rgba(225, 231, 240, 0.85);
+    backdrop-filter: blur(6px);
+    z-index: 2;
+  }
+  .marquee-track {
+    display: flex;
+    gap: 3rem;
+    animation: scroll 40s linear infinite;
+    padding: 1.1rem 0;
+    white-space: nowrap;
+    width: max-content;
+  }
+  .marquee-item {
+    font-family: 'Chakra Petch', sans-serif;
+    font-size: 1.2rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 3rem;
+    color: var(--ink);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .marquee-item::after {
+    content: '◆';
+    color: var(--accent);
+    font-size: 0.85rem;
+  }
+  @keyframes scroll {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+  
+  /* Section styles */
+  .section {
+    padding: 8rem 2.5rem;
+    position: relative;
+    background: rgba(237, 241, 247, 0.85);
+    backdrop-filter: blur(10px);
+    border-top: 1px solid var(--border);
+  }
+  .section-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+  
+  .section-number {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    letter-spacing: 0.2em;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    text-transform: uppercase;
+  }
+  .section-number::before {
+    content: '';
+    width: 60px; height: 1px;
+    background: var(--ink);
+  }
+  
+  .section-title {
+    font-family: 'Chakra Petch', sans-serif;
+    font-size: clamp(2.5rem, 6vw, 5rem);
+    line-height: 1;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 4rem;
+    text-transform: uppercase;
+  }
+  
+  /* About Section */
+  .about-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 3rem;
+    border-top: 1px solid var(--border);
+    padding-top: 3rem;
+  }
+  .about-block { position: relative; padding-top: 2rem; }
+  .about-block::before {
+    content: attr(data-num);
+    position: absolute;
+    top: -20px;
+    right: 0;
+    font-family: 'Chakra Petch', sans-serif;
+    font-size: 6rem;
+    font-weight: 700;
+    color: var(--accent);
+    opacity: 0.1;
+    line-height: 1;
+  }
+  .about-block-title {
+    font-family: 'Chakra Petch', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--accent);
+    margin-bottom: 1.5rem;
+    letter-spacing: 0.05em;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-transform: uppercase;
+  }
+  .about-block-title::before {
+    content: '';
+    width: 8px; height: 8px;
+    background: var(--accent);
+    display: inline-block;
+  }
+  .about-text {
+    font-size: 1.05rem;
+    line-height: 1.8;
+    color: var(--ink-soft);
+  }
+  .about-intro {
+    font-family: 'Outfit', 'Noto Sans SC', sans-serif;
+    font-weight: 500;
+    font-size: clamp(1.5rem, 3vw, 2.25rem);
+    line-height: 1.4;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+    margin-bottom: 5rem;
+    max-width: 1000px;
+  }
+  .about-intro span { color: var(--accent); font-weight: 700; }
+  
+  /* Card Layouts with Images */
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+  
+  .split-card {
+    background: var(--bg-card-solid);
+    border: 1px solid var(--border);
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    display: grid;
+    grid-template-columns: 1fr 1.1fr;
+  }
+  .split-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 30px 60px -30px rgba(10, 26, 53, 0.25);
+    border-color: rgba(10, 26, 53, 0.15);
+  }
+  
+  .card-image-wrap {
+    position: relative;
+    overflow: hidden;
+    min-height: 100%;
+  }
+  .card-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .split-card:hover .card-image {
+    transform: scale(1.05);
+  }
+  
+  .card-content {
+    padding: 3.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  
+  .card-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+    margin-bottom: 1.5rem;
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    align-self: flex-start;
+  }
+  
+  .card-title {
+    font-family: 'Chakra Petch', sans-serif;
+    font-weight: 600;
+    font-size: 1.75rem;
+    line-height: 1.2;
+    margin-bottom: 1.5rem;
+    letter-spacing: -0.01em;
+    text-transform: uppercase;
+  }
+  
+  .card-desc {
+    font-size: 1.05rem;
+    line-height: 1.75;
+    color: var(--ink-soft);
+  }
+  
+  /* Variations */
+  .split-card.dark .card-content { background: var(--ink); color: var(--bg); }
+  .split-card.dark .card-desc { color: rgba(237, 241, 247, 0.75); }
+  .split-card.dark .card-label { border-color: rgba(237, 241, 247, 0.2); color: rgba(237, 241, 247, 0.6); }
+  
+  .split-card.accent .card-content { background: var(--accent); color: white; }
+  .split-card.accent .card-desc { color: rgba(255, 255, 255, 0.9); }
+  .split-card.accent .card-label { border-color: rgba(255, 255, 255, 0.3); color: rgba(255, 255, 255, 0.8); }
+  
+  .text-highlight { color: var(--accent); font-weight: 600; }
+  .split-card.dark .text-highlight { color: var(--accent-light); }
+  .split-card.accent .text-highlight { color: #FFFFFF; text-decoration: underline; text-decoration-color: rgba(255,255,255,0.4); text-underline-offset: 4px; }
+  
+  /* Repair Section Specifics */
+  .repair-card-content {
+    padding: 3.5rem;
+    background: var(--bg-card-solid);
+    border: 1px solid var(--border);
+    transition: all 0.4s;
+  }
+  .repair-card-wrap {
+    transition: all 0.4s;
+  }
+  .repair-card-wrap:hover .repair-card-content {
+    background: var(--ink);
+    color: var(--bg);
+  }
+  .repair-card-wrap:hover .repair-card-content .card-label,
+  .repair-card-wrap:hover .repair-card-content .card-desc,
+  .repair-card-wrap:hover .repair-card-content .repair-card-extra {
+    color: rgba(237, 241, 247, 0.75);
+  }
+  .repair-card-extra {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.95rem;
+    line-height: 1.7;
+    color: var(--ink-soft);
+    margin-bottom: 2.5rem;
+    transition: color 0.3s;
+  }
+  .repair-devices {
+    border-top: 1px solid var(--border);
+    padding-top: 1.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    transition: border-color 0.3s;
+  }
+  .repair-card-wrap:hover .repair-devices { border-color: rgba(237, 241, 247, 0.15); }
+  .repair-device {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    padding: 0.4rem 0.85rem;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    letter-spacing: 0.05em;
+    transition: all 0.3s;
+  }
+  .repair-card-wrap:hover .repair-device {
+    border-color: rgba(237, 241, 247, 0.2);
+    color: rgba(237, 241, 247, 0.9);
+  }
+  
+  /* Port Solutions - Top Image Cards */
+  .service-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+  .service-card {
+    background: var(--bg-card-solid);
+    border: 1px solid var(--border);
+    position: relative;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    flex-direction: column;
+  }
+  .service-card:nth-child(2) { margin-top: 3rem; }
+  .service-card:nth-child(3) { margin-top: 6rem; }
+  
+  .service-card-img-wrap {
+    height: 220px;
+    overflow: hidden;
+    position: relative;
+  }
+  .service-card-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s ease;
+  }
+  .service-card:hover .service-card-img {
+    transform: scale(1.05);
+  }
+  
+  .service-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 3px;
+    background: var(--accent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.5s;
+    z-index: 2;
+  }
+  .service-card:hover::before { transform: scaleX(1); }
+  .service-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 30px 60px -30px rgba(10, 26, 53, 0.25);
+    border-color: rgba(10, 26, 53, 0.15);
+  }
+  
+  .service-card-body {
+    padding: 2.5rem;
+    flex: 1;
+  }
+  
+  .service-icon {
+    width: 56px; height: 56px;
+    border: 1px solid var(--ink);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+    font-size: 1.25rem;
+    color: var(--ink);
+    transition: all 0.4s;
+    background: white;
+  }
+  .service-card:hover .service-icon {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: white;
+    transform: rotate(360deg);
+  }
+  .service-card-num {
+    position: absolute;
+    top: 1.5rem; right: 1.5rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    color: white;
+    letter-spacing: 0.1em;
+    background: rgba(10, 26, 53, 0.6);
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    backdrop-filter: blur(4px);
+    z-index: 2;
+  }
+  .service-card-title {
+    font-family: 'Chakra Petch', sans-serif;
+    font-weight: 600;
+    font-size: 1.4rem;
+    margin-bottom: 1rem;
+    line-height: 1.2;
+    text-transform: uppercase;
+    letter-spacing: -0.01em;
+  }
+  .service-card-desc {
+    font-size: 0.95rem;
+    line-height: 1.7;
+    color: var(--ink-soft);
+  }
+  .text-lead {
+    font-weight: 600;
+    color: var(--ink);
+  }
+  
+  /* Partners */
+  .partners-marquee {
+    margin-top: 0;
+    margin-bottom: 5rem;
+    overflow: hidden;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 2.5rem 0;
+    background: rgba(225, 231, 240, 0.85);
+    backdrop-filter: blur(6px);
+  }
+  .partners-marquee-track {
+    display: flex;
+    gap: 4rem;
+    animation: scroll 35s linear infinite;
+    align-items: center;
+    width: max-content;
+  }
+  .partner-name-marq {
+    font-family: 'Chakra Petch', sans-serif;
+    font-size: 3rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+    opacity: 0.35;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 4rem;
+    text-transform: uppercase;
+  }
+  .partner-name-marq::after {
+    content: '◆';
+    color: var(--accent);
+    font-size: 1rem;
+    opacity: 0.5;
+  }
+  
+  .partners-list {
+    border-top: 1px solid var(--border);
+  }
+  .partner-row {
+    display: grid;
+    grid-template-columns: 80px 300px 1fr;
+    gap: 4rem;
+    padding: 3.5rem 0;
+    border-bottom: 1px solid var(--border);
+    align-items: center;
+    transition: background 0.3s;
+  }
+  .partner-row:hover { background: rgba(255, 255, 255, 0.5); }
+  .partner-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.9rem;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+  }
+  .partner-logo-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100px;
+    width: 100%;
+    background: white;
+    border: 1px solid var(--border);
+    padding: 1.5rem;
+    border-radius: 4px;
+  }
+  .partner-logo-img {
+    max-height: 70px;
+    max-width: 90%;
+    width: auto;
+    object-fit: contain;
+    opacity: 0.85;
+    transition: opacity 0.3s, transform 0.3s;
+  }
+  .partner-row:hover .partner-logo-img {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+  .partner-desc-big {
+    font-size: 1.1rem;
+    line-height: 1.75;
+    color: var(--ink-soft);
+  }
+  
+  /* Contact */
+  .contact-layout {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 5rem;
+    align-items: center;
+  }
+  .contact-cta-text {
+    font-size: 1.35rem;
+    line-height: 1.7;
+    color: var(--ink-soft);
+    margin-bottom: 3rem;
+    font-weight: 400;
+    max-width: 500px;
+  }
+  .contact-cta-text span { color: var(--accent); font-weight: 600; }
+  
+  .contact-email-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 1rem;
+    background: var(--ink);
+    color: var(--bg);
+    padding: 1.25rem 2.5rem;
+    border-radius: 4px;
+    font-family: 'Chakra Petch', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s;
+    border: 1px solid var(--ink);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+  .contact-email-btn:hover {
+    background: var(--accent);
+    border-color: var(--accent);
+    transform: translateY(-3px);
+    gap: 1.5rem;
+    box-shadow: 0 8px 20px rgba(0, 82, 155, 0.3);
+  }
+  
+  .contact-info-stack { display: flex; flex-direction: column; gap: 2.5rem; }
+  .contact-block { border-left: 2px solid var(--accent); padding-left: 1.5rem; }
+  .contact-block-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+    margin-bottom: 0.8rem;
+  }
+  .contact-block-value {
+    font-size: 1.2rem;
+    font-weight: 400;
+    line-height: 1.7;
+    letter-spacing: 0.01em;
+    color: var(--ink-soft);
+  }
+  .contact-block-value a {
+    color: inherit;
+    text-decoration: none;
+    transition: color 0.3s;
+    border-bottom: 1px solid transparent;
+  }
+  .contact-block-value a:hover {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+  }
+  
+  /* Footer */
+  .footer {
+    background: var(--ink);
+    color: var(--bg);
+    padding: 5rem 2.5rem 2rem;
+    position: relative;
+    z-index: 2;
+  }
+  .footer-inner { max-width: 1400px; margin: 0 auto; }
+  .footer-top {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 3rem;
+    padding-bottom: 3rem;
+    border-bottom: 1px solid rgba(237, 241, 247, 0.1);
+  }
+  .footer-tagline {
+    color: rgba(237, 241, 247, 0.55);
+    max-width: 320px;
+    line-height: 1.6;
+    font-size: 1.05rem;
+  }
+  .footer-heading {
+    font-family: 'Chakra Petch', sans-serif;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: rgba(237, 241, 247, 0.5);
+    margin-bottom: 1.5rem;
+    font-weight: 600;
+  }
+  .footer-link {
+    color: rgba(237, 241, 247, 0.75);
+    text-decoration: none;
+    font-size: 1rem;
+    margin-bottom: 0.85rem;
+    display: block;
+    transition: color 0.3s;
+  }
+  .footer-link:hover { color: var(--accent-light); }
+  .footer-bottom {
+    padding-top: 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: rgba(237, 241, 247, 0.4);
+    font-size: 0.85rem;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  
+  /* Reveal animation */
+  .reveal {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.9s cubic-bezier(0.4, 0, 0.2, 1), transform 0.9s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .reveal-delay-1 { transition-delay: 0.1s; }
+  .reveal-delay-2 { transition-delay: 0.2s; }
+  .reveal-delay-3 { transition-delay: 0.3s; }
+  
+  /* Side nav dots */
+  .side-nav {
+    position: fixed;
+    right: 2rem;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 50;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .side-nav-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    border: 1px solid var(--ink);
+    background: transparent;
+    cursor: none;
+    transition: all 0.3s;
+    position: relative;
+    display: block;
+  }
+  .side-nav-dot.active {
+    background: var(--accent);
+    border-color: var(--accent);
+    transform: scale(1.4);
+  }
+  .side-nav-dot::after {
+    content: attr(data-label);
+    position: absolute;
+    right: 100%;
+    top: 50%;
+    transform: translateY(-50%);
+    margin-right: 1rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--ink);
+    white-space: nowrap;
+    opacity: 0;
+    transition: opacity 0.3s;
+    pointer-events: none;
+  }
+  .side-nav-dot:hover::after { opacity: 1; }
+  
+  /* Responsive - Laptops */
+  @media (max-width: 1100px) {
+    .nav-links { gap: 1.5rem; }
+  }
+  
+  /* Responsive - Tablets */
+  @media (max-width: 968px) {
+    .nav { padding: 1rem 1.5rem; }
+    .nav-links { display: none; }
+    .nav-right { gap: 1rem; }
+    .lang-switcher { display: flex; }
+    
+    .hero { padding: 7rem 1.5rem 4rem; min-height: 100svh; }
+    .hero-title { font-size: clamp(3rem, 14vw, 5rem); margin-bottom: 1.5rem; }
+    .hero-subtitle { font-size: 1.1rem; margin-bottom: 2rem; }
+    
+    .section { padding: 5rem 1.5rem; background: rgba(237, 241, 247, 0.95); backdrop-filter: none; }
+    .section-title { font-size: clamp(2rem, 8vw, 3rem); margin-bottom: 3rem; }
+    .section-number { font-size: 0.7rem; }
+    .section-number::before { width: 30px; }
+    
+    .about-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+    .about-intro { font-size: clamp(1.2rem, 4vw, 1.5rem); margin-bottom: 3rem; }
+    .about-block::before { font-size: 4rem; top: -10px; }
+    
+    .grid-2 { grid-template-columns: 1fr; gap: 1.5rem; }
+    .split-card { grid-template-columns: 1fr; }
+    .card-image-wrap { min-height: 220px; max-height: 250px; }
+    .card-content { padding: 2rem; }
+    .card-title { font-size: 1.3rem; }
+    .repair-card-content { padding: 2rem; }
+
+    .service-grid { grid-template-columns: 1fr; }
+    .service-card:nth-child(n) { margin-top: 0; }
+    .service-card-img-wrap { height: 200px; }
+    .service-card-body { padding: 2rem; }
+    
+    .partners-marquee { padding: 1.5rem 0; margin-bottom: 3rem; }
+    .partner-name-marq { font-size: 2rem; gap: 2rem; }
+    .partners-marquee-track { gap: 2rem; }
+    .partner-row { grid-template-columns: 1fr; gap: 1rem; padding: 2rem 0; text-align: center; }
+    .partner-num { text-align: center; }
+    .partner-logo-wrap { margin: 0 auto; max-width: 250px; height: 100px; }
+    
+    .contact-layout { grid-template-columns: 1fr; gap: 2.5rem; }
+    .contact-cta-text { font-size: 1.1rem; margin-bottom: 2rem; }
+    .contact-email-btn { padding: 1rem 1.5rem; font-size: 0.9rem; width: 100%; justify-content: center; }
+    .contact-info-stack { gap: 2rem; }
+    .contact-block-value { font-size: 1rem; }
+    
+    .footer { padding: 4rem 1.5rem 2rem; }
+    .footer-top { grid-template-columns: 1fr 1fr; gap: 2rem; text-align: left; }
+    .footer-bottom { flex-direction: column; gap: 1rem; text-align: center; font-size: 0.75rem; }
+    
+    .side-nav { display: none; }
+    body { cursor: auto; }
+    .cursor-dot, .cursor-outline { display: none; }
+    .submit-btn, .form-select, .side-nav-dot, a, button { cursor: pointer; }
+    
+    #network { opacity: 0.15; } 
+  }
+  
+  /* Responsive - Mobile Phones */
+  @media (max-width: 600px) {
+    .nav-cta { padding: 0.5rem 1rem; font-size: 0.75rem; }
+    .lang-btn { padding: 0.2rem 0.4rem; font-size: 0.65rem; }
+    .nav-logo-img { height: 36px; }
+    
+    .footer-top { grid-template-columns: 1fr; text-align: center; }
+    .footer-heading { margin-top: 1.5rem; }
+    .footer-top > div:first-child .footer-tagline { margin: 0 auto; }
+    .footer-link { margin-bottom: 0.5rem; }
+    
+    .card-content { padding: 1.5rem; }
+    .repair-card-content { padding: 1.5rem; }
+    .service-card-body { padding: 1.5rem; }
+    .card-title { font-size: 1.2rem; }
+    
+    .partner-logo-wrap { max-width: 200px; height: 80px; padding: 1rem; }
+    .partner-logo-img { max-height: 50px; }
+  }
+  
+  ::selection { background: var(--accent); color: white; }
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg-alt); }
+  ::-webkit-scrollbar-thumb { background: var(--ink); border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+</style>
+</head>
+<body>
+  <canvas id="network"></canvas>
+  
+  <div class="cursor-dot" id="cursorDot"></div>
+  <div class="cursor-outline" id="cursorOutline"></div>
+  <div class="scroll-progress" id="scrollProgress"></div>
+  
+  <div class="side-nav">
+    <a href="#hero" class="side-nav-dot active" data-label="Home" data-section="hero"></a>
+    <a href="#about" class="side-nav-dot" data-label="About" data-section="about"></a>
+    <a href="#port" class="side-nav-dot" data-label="Port" data-section="port"></a>
+    <a href="#supply" class="side-nav-dot" data-label="Supply" data-section="supply"></a>
+    <a href="#consultancy" class="side-nav-dot" data-label="Consultancy" data-section="consultancy"></a>
+    <a href="#repair" class="side-nav-dot" data-label="Repair" data-section="repair"></a>
+    <a href="#maintenance" class="side-nav-dot" data-label="Maintenance" data-section="maintenance"></a>
+    <a href="#partners" class="side-nav-dot" data-label="Partners" data-section="partners"></a>
+    <a href="#contact" class="side-nav-dot" data-label="Contact" data-section="contact"></a>
+  </div>
+  
+  <div class="content-wrapper">
+    <nav class="nav" id="nav">
+      <a href="#hero" class="nav-logo">
+        <img src="https://z-cdn-media.chatglm.cn/files/db86fb4e-2354-490b-877f-74df2b1e65d1.jpg?auth_key=1884523170-8c0f93b5c79d41e7bef02b080df691e2-0-577efd4d9a0d5b4e24c48c13d5d3dc7f" alt="AXIA Business Solutions" class="nav-logo-img">
+      </a>
+      <div class="nav-right">
+        <div class="nav-links">
+          <a href="#about" class="nav-link" data-i18n="nav_about">About</a>
+          <a href="#port" class="nav-link" data-i18n="nav_port">Port Solutions</a>
+          <a href="#supply" class="nav-link" data-i18n="nav_supply">Supply Chain</a>
+          <a href="#consultancy" class="nav-link" data-i18n="nav_consult">Consultancy</a>
+          <a href="#partners" class="nav-link" data-i18n="nav_partners">Partners</a>
+        </div>
+        <div class="lang-switcher">
+          <button class="lang-btn active" onclick="setLanguage('en')">EN</button>
+          <button class="lang-btn" onclick="setLanguage('zh')">中文</button>
+          <button class="lang-btn" onclick="setLanguage('ms')">BM</button>
+        </div>
+        <a href="#contact" class="nav-cta" data-i18n="nav_cta">Get in touch</a>
+      </div>
+    </nav>
+    
+    <section class="hero" id="hero">
+      <div class="hero-content">
+        <div class="hero-eyebrow" data-i18n="hero_eyebrow">AXIA BUSINESS SOLUTIONS — ENTERPRISE INTEGRATION</div>
+        <h1 class="hero-title">
+          <span class="line"><span>AXIA</span></span>
+          <span class="line"><span>Business</span></span>
+          <span class="line"><span><em>Solutions.</em></span></span>
+        </h1>
+        <p class="hero-subtitle" data-i18n="hero_sub">
+          We are committed to help your organization by utilizing our experience to fulfill our customer’s expectations.
+        </p>
+      </div>
+      <div class="marquee">
+        <div class="marquee-track">
+          <span class="marquee-item" data-i18n="marq_1">Port Solutions</span>
+          <span class="marquee-item" data-i18n="marq_2">Outdoor Wireless</span>
+          <span class="marquee-item" data-i18n="marq_3">Warehouse Management</span>
+          <span class="marquee-item" data-i18n="marq_4">Supply Chain</span>
+          <span class="marquee-item" data-i18n="marq_5">IT Consultancy</span>
+          <span class="marquee-item" data-i18n="marq_6">Device Repair</span>
+          <span class="marquee-item" data-i18n="marq_7">Preventive Maintenance</span>
+          <span class="marquee-item" data-i18n="marq_1">Port Solutions</span>
+          <span class="marquee-item" data-i18n="marq_2">Outdoor Wireless</span>
+          <span class="marquee-item" data-i18n="marq_3">Warehouse Management</span>
+          <span class="marquee-item" data-i18n="marq_4">Supply Chain</span>
+          <span class="marquee-item" data-i18n="marq_5">IT Consultancy</span>
+          <span class="marquee-item" data-i18n="marq_6">Device Repair</span>
+          <span class="marquee-item" data-i18n="marq_7">Preventive Maintenance</span>
+        </div>
+      </div>
+    </section>
+    
+    <section class="section" id="about">
+      <div class="section-inner">
+        <div class="section-number reveal" data-i18n="about_num">01 — About Us</div>
+        <h2 class="section-title reveal" data-i18n="about_title">About AXIA<br>Business <em>Solutions.</em></h2>
+        
+        <p class="about-intro reveal" data-i18n="about_intro">
+          AXIA BUSINESS SOLUTIONS leverages an established network for a collaboration framework, put together by an <span>elite pool of enterprise solution professionals</span> who work with world-class technology partners.
+        </p>
+        
+        <div class="about-grid">
+          <div class="about-block reveal" data-num="01">
+            <div class="about-block-title" data-i18n="about_b1_t">The Framework</div>
+            <p class="about-text" data-i18n="about_b1_p">
+              This brings to the table tremendous insight and experience in fixed and wireless infrastructure setup, and business application implementation and development, as well as solution integration and other professional services.
+            </p>
+          </div>
+          <div class="about-block reveal reveal-delay-1" data-num="02">
+            <div class="about-block-title" data-i18n="about_b2_t">The Commitment</div>
+            <p class="about-text" data-i18n="about_b2_p">
+              The success of any system integration and implementation is dependent on several critical factors, including project management, system design, testing, training, products and support. Axia Business Solutions is able to offer a complete and comprehensive system solution with support services through a single vendor source responsibility.
+            </p>
+          </div>
+          <div class="about-block reveal reveal-delay-2" data-num="03">
+            <div class="about-block-title" data-i18n="about_b3_t">The Environment</div>
+            <p class="about-text" data-i18n="about_b3_p">
+              We have an experienced engineering team who are very familiar with Port working environment, which ensures that our system design is practical. In terms of providing a turnkey solution, our competence in design and implementation including the deployment of WiFi Handheld Terminal devices.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <section class="section" id="port">
+      <div class="section-inner">
+        <div class="section-number reveal" data-i18n="port_num">02 — Port Solutions</div>
+        <h2 class="section-title reveal" data-i18n="port_title">Port <em>Solutions.</em></h2>
+        
+        <div class="service-grid">
+          <div class="service-card reveal">
+            <div class="service-card-img-wrap">
+              <span class="service-card-num">P/01</span>
+              <img src="https://images.unsplash.com/photo-1486325212027-8081e485255e?q=80&w=1000&auto=format&fit=crop" alt="Engineer Site Survey" class="service-card-img" loading="lazy">
+            </div>
+            <div class="service-card-body">
+              <div class="service-icon"><i class="fa-solid fa-magnifying-glass-chart"></i></div>
+              <h3 class="service-card-title" data-i18n="port_1_t">Pre-Sales & Post Sales Site Survey</h3>
+              <p class="service-card-desc" data-i18n="port_1_p">
+                <span class="text-lead">Before we begin any project</span> we will conduct site survey, this allows us to gather information for a design or an estimation to complete the initial tasks required for an outdoor activity. After project completion, we will conduct survey as well to identify which area can be improvised, what are the users feedback or prevention task can be done.
+              </p>
+            </div>
+          </div>
+          
+          <div class="service-card reveal reveal-delay-1">
+            <div class="service-card-img-wrap">
+              <span class="service-card-num">P/02</span>
+              <img src="https://images.unsplash.com/photo-1530124566582-a618bc2615dc?q=80&w=1000&auto=format&fit=crop" alt="Pole Installation" class="service-card-img" loading="lazy">
+            </div>
+            <div class="service-card-body">
+              <div class="service-icon"><i class="fa-solid fa-tower-cell"></i></div>
+              <h3 class="service-card-title" data-i18n="port_2_t">Pole Installation</h3>
+              <p class="service-card-desc" data-i18n="port_2_p">
+                <span class="text-lead">We are experienced on providing client feedback</span> related pole usage based on their requirements and nature of work, in addition we also have experience on pole installation, where location of installation can be difference maker in some scenarios, such as signal coverage.
+              </p>
+            </div>
+          </div>
+          
+          <div class="service-card reveal reveal-delay-2">
+            <div class="service-card-img-wrap">
+              <span class="service-card-num">P/03</span>
+              <img src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?q=80&w=1000&auto=format&fit=crop" alt="Server Rack Cabling" class="service-card-img" loading="lazy">
+            </div>
+            <div class="service-card-body">
+              <div class="service-icon"><i class="fa-solid fa-network-wired"></i></div>
+              <h3 class="service-card-title" data-i18n="port_3_t">Cabling Design</h3>
+              <p class="service-card-desc" data-i18n="port_3_p">
+                <span class="text-lead">Cabling management is vital to business</span> as they allow you to keep systems running in optimal level, also reduce overall infrastructure costs. Furthermore, downtime can be reduced with proper cabling management because it will be easier for support team to troubleshoot.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <section class="section" id="supply">
+      <div class="section-inner">
+        <div class="section-number reveal" data-i18n="supply_num">03 — Supply Chain Solutions</div>
+        <h2 class="section-title reveal" data-i18n="supply_title">Supply Chain <em>Solutions.</em></h2>
+        
+        <div class="grid-2">
+          <div class="split-card reveal">
+            <div class="card-image-wrap">
+              <img src="https://images.unsplash.com/photo-1553413077-190dd305871c?q=80&w=1000&auto=format&fit=crop" alt="Warehouse Management System" class="card-image" loading="lazy">
+            </div>
+            <div class="card-content">
+              <div class="card-label" data-i18n="supply_1_l">Solution / 01</div>
+              <h3 class="card-title" data-i18n="supply_1_t">Warehouse Management System (WMS) Consultant</h3>
+              <p class="card-desc" data-i18n="supply_1_p">
+                WMS can help businesses by <span class="text-highlight">managing your housekeeping systematically</span> and improve employees working efficiency. Furthermore, WMS allows you to monitor your productivity via access to reports / analysis generated by the system.
+              </p>
+            </div>
+          </div>
+          
+          <div class="split-card dark reveal reveal-delay-1">
+            <div class="card-image-wrap">
+              <img src="https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?q=80&w=1000&auto=format&fit=crop" alt="Hardware and Software Infrastructure" class="card-image" loading="lazy">
+            </div>
+            <div class="card-content">
+              <div class="card-label" data-i18n="supply_2_l">Solution / 02</div>
+              <h3 class="card-title" data-i18n="supply_2_t">Infrastructure (Hardware + Software)</h3>
+              <p class="card-desc" data-i18n="supply_2_p">
+                We also provide our suggestion on which hardware and software to use that can fulfill your routine task based on your requirements, budget and working environment. This include support and guidance to <span class="text-highlight">ensure staffs able to adapt new device or software</span>, also achieve smooth transition from previous device without affecting their productivity once user migrate to new framework.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <section class="section" id="consultancy">
+      <div class="section-inner">
+        <div class="section-number reveal" data-i18n="consult_num">04 — IT Consultancy</div>
+        <h2 class="section-title reveal" data-i18n="consult_title">IT <em>Consultancy.</em></h2>
+        
+        <div class="grid-2">
+          <div class="split-card reveal">
+            <div class="card-image-wrap">
+              <img src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?q=80&w=1000&auto=format&fit=crop" alt="IT Project Installation Team" class="card-image" loading="lazy">
+            </div>
+            <div class="card-content">
+              <div class="card-label" data-i18n="consult_1_l">Service / 01</div>
+              <h3 class="card-title" data-i18n="consult_1_t">Design, Project Management & Installation</h3>
+              <p class="card-desc" data-i18n="consult_1_p">
+                We able to provide feedback to customers inquiry based on which industry is related to, such as <span class="text-highlight">what features or improvements can be done</span> that will help their operations, in the meantime we also provide installation services to our customer.
+              </p>
+            </div>
+          </div>
+          
+          <div class="split-card accent reveal reveal-delay-1">
+            <div class="card-image-wrap">
+              <img src="https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?q=80&w=1000&auto=format&fit=crop" alt="Maintenance Support" class="card-image" loading="lazy">
+            </div>
+            <div class="card-content">
+              <div class="card-label" data-i18n="consult_2_l">Service / 02</div>
+              <h3 class="card-title" data-i18n="consult_2_t">Maintenance Support</h3>
+              <p class="card-desc" data-i18n="consult_2_p">
+                On site maintenance support is also available for customers when facing issues such as service disruption, hardware failure. <span class="text-highlight">Preventive maintenance will be conducted throughout the year</span> to ensure operation runs smoothly and troubleshoot any issue before causing impact, minimizing downtime and critical issues.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <section class="section" id="repair">
+      <div class="section-inner">
+        <div class="section-number reveal" data-i18n="repair_num">05 — Repair Services</div>
+        <h2 class="section-title reveal" data-i18n="repair_title">Repair <em>Services.</em></h2>
+        
+        <div class="grid-2">
+          <div class="split-card repair-card-wrap reveal">
+            <div class="card-image-wrap">
+              <img src="https://images.unsplash.com/photo-1581092160562-40aa08e78837?q=80&w=1000&auto=format&fit=crop" alt="Handheld Device Repair" class="card-image" loading="lazy">
+            </div>
+            <div class="repair-card-content">
+              <div class="card-label" style="color: var(--accent); border-color: var(--accent);" data-i18n="repair_1_l">Repair / Handheld</div>
+              <h3 class="card-title" data-i18n="repair_1_t">Handheld Device Repair Services</h3>
+              <p class="repair-card-extra" data-i18n="repair_1_p">
+                // We provide repair services for handheld devices such as MX7, MX9.
+              </p>
+              <div class="repair-devices">
+                <span class="repair-device">MX7</span>
+                <span class="repair-device">MX9</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="split-card repair-card-wrap reveal reveal-delay-1">
+            <div class="card-image-wrap">
+              <img src="https://images.unsplash.com/photo-1607706189992-eae578626c86?q=80&w=1000&auto=format&fit=crop" alt="Mounted Device Repair" class="card-image" loading="lazy">
+            </div>
+            <div class="repair-card-content">
+              <div class="card-label" style="color: var(--accent); border-color: var(--accent);" data-i18n="repair_2_l">Repair / Mounted</div>
+              <h3 class="card-title" data-i18n="repair_2_t">Mounted Device Repair Services</h3>
+              <p class="repair-card-extra" data-i18n="repair_2_p">
+                // We also experienced on repairing mounted device such as Ruggon MT7000, PX501 and Honeywell Thor VM1.
+              </p>
+              <div class="repair-devices">
+                <span class="repair-device">Ruggon MT7000</span>
+                <span class="repair-device">PX501</span>
+                <span class="repair-device">Honeywell Thor VM1</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <section class="section" id="maintenance">
+      <div class="section-inner">
+        <div class="section-number reveal" data-i18n="maint_num">06 — Maintenance</div>
+        <h2 class="section-title reveal" data-i18n="maint_title">Preventive & <em>Corrective.</em></h2>
+        
+        <div class="grid-2">
+          <div class="split-card reveal">
+            <div class="card-image-wrap">
+              <img src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?q=80&w=1000&auto=format&fit=crop" alt="Preventive Maintenance Technician" class="card-image" loading="lazy">
+            </div>
+            <div class="card-content">
+              <div class="card-label" data-i18n="maint_1_l">Preventive</div>
+              <h3 class="card-title" data-i18n="maint_1_t">Scheduled Preventive Maintenance</h3>
+              <p class="card-desc" data-i18n="maint_1_p">
+                Any project was delivered will have preventive maintenance each year, number of times will be depends on size of the project. This exercise is to ensure all deployed devices / equipment are still in optimal working state. Any findings during the maintenance will be noted accordingly, any changes made will be notify to users.
+              </p>
+            </div>
+          </div>
+          
+          <div class="split-card dark reveal reveal-delay-1">
+            <div class="card-image-wrap">
+              <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=1000&auto=format&fit=crop" alt="Corrective Maintenance" class="card-image" loading="lazy">
+            </div>
+            <div class="card-content">
+              <div class="card-label" data-i18n="maint_2_l">Corrective</div>
+              <h3 class="card-title" data-i18n="maint_2_t">Corrective Maintenance</h3>
+              <p class="card-desc" data-i18n="maint_2_p">
+                We also provide corrective maintenance work, such as signal interference, weak signal strength issues. We will primarily focus on finding root cause, then do correction based on the findings and monitor if same issue persisted or not.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <section class="section" id="partners">
+      <div class="section-inner">
+        <div class="section-number reveal" data-i18n="part_num">07 — Partners</div>
+        <h2 class="section-title reveal" data-i18n="part_title">Our <em>Partners.</em></h2>
+      </div>
+      
+      <div class="partners-marquee reveal">
+        <div class="partners-marquee-track">
+          <span class="partner-name-marq">RuggON</span>
+          <span class="partner-name-marq">Point Mobile</span>
+          <span class="partner-name-marq">Ubiquiti</span>
+          <span class="partner-name-marq">Bosch</span>
+          <span class="partner-name-marq">Tyco</span>
+          <span class="partner-name-marq">Cisco</span>
+          <span class="partner-name-marq">RuggON</span>
+          <span class="partner-name-marq">Point Mobile</span>
+          <span class="partner-name-marq">Ubiquiti</span>
+          <span class="partner-name-marq">Bosch</span>
+          <span class="partner-name-marq">Tyco</span>
+          <span class="partner-name-marq">Cisco</span>
+        </div>
+      </div>
+      
+      <div class="section-inner">
+        <div class="partners-list">
+          <div class="partner-row reveal">
+            <div class="partner-num">01 / 06</div>
+            <div class="partner-logo-wrap">
+              <img src="https://z-cdn-media.chatglm.cn/files/93e2e077-6ccd-4ad7-9775-ba1b623bfab0.png?auth_key=1884543402-682b9dc5db284d71bd5d28c2ef71260f-0-25cc78b35691f8f842f70cd5405c175b" alt="RuggON Logo" class="partner-logo-img">
+            </div>
+            <p class="partner-desc-big" data-i18n="part_1_d">
+              RuggON is founded in 2014, a rugged computing solutions provider good at designing quality rugged tablets, vehicle mount computers, mobile data terminals, monitors, and data-capture peripherals and purpose-built accessories.
+            </p>
+          </div>
+          <div class="partner-row reveal">
+            <div class="partner-num">02 / 06</div>
+            <div class="partner-logo-wrap">
+              <img src="https://z-cdn-media.chatglm.cn/files/d743f6dd-0cae-4c62-9dc7-9af5b1f81821.png?auth_key=1884543402-caec4fda2fc7482b975c7d794f650e13-0-87e90ca64cbf49d50c3073cfdc68de15" alt="Point Mobile Logo" class="partner-logo-img">
+            </div>
+            <p class="partner-desc-big" data-i18n="part_2_d">
+              Founded in 2006, Point Mobile is one of the fastest growing enterprise handheld manufacturers in the world. We offer a full range of handheld mobile computers, rugged smartphones, LTE/Android integrated mobile payment devices, healthcare terminals, RFID readers and portable Bluetooth scanners.
+            </p>
+          </div>
+          <div class="partner-row reveal">
+            <div class="partner-num">03 / 06</div>
+            <div class="partner-logo-wrap">
+              <img src="https://z-cdn-media.chatglm.cn/files/0c4dc07b-9532-4448-8a9c-698537452ac5.png?auth_key=1884543402-96d6989e5d294c45a78d3c9ade7282e4-0-4be46a0a9bb5db61bcb86504f045a1c9" alt="Ubiquiti Logo" class="partner-logo-img">
+            </div>
+            <p class="partner-desc-big" data-i18n="part_3_d">
+              Ubiquiti Inc. (formerly Ubiquiti Networks, Inc.) is an American technology company founded in San Jose, California, in 2005. Now based in New York City, Ubiquiti manufactures and sells wireless data communication and wired products for enterprises and homes.
+            </p>
+          </div>
+          <div class="partner-row reveal">
+            <div class="partner-num">04 / 06</div>
+            <div class="partner-logo-wrap">
+              <img src="https://z-cdn-media.chatglm.cn/files/2e20b71b-a434-44c2-b167-f3869467af4c.png?auth_key=1884543402-8d223d25de5a42028ae042844140ca1a-0-ffd5c49ba619dd62900e92adfc549515" alt="Bosch Logo" class="partner-logo-img">
+            </div>
+            <p class="partner-desc-big" data-i18n="part_4_d">
+              We are constantly looking for new solutions to make buildings smarter and more efficient, such as air-conditioning and heating technology, as well as for video surveillance and fire protection.
+            </p>
+          </div>
+          <div class="partner-row reveal">
+            <div class="partner-num">05 / 06</div>
+            <div class="partner-logo-wrap">
+              <img src="https://z-cdn-media.chatglm.cn/files/61771e9e-bf5d-4aa2-9b86-f534f797096b.png?auth_key=1884543402-ab83a6d2c8184541918ce6c38c0efa1c-0-b9211f735bb2430a833e5bcc37425428" alt="Tyco Logo" class="partner-logo-img">
+            </div>
+            <p class="partner-desc-big" data-i18n="part_5_d">
+              Tyco International mission is to advance safety and security. We find smarter ways to save lives, improve businesses and protect where people live and work.
+            </p>
+          </div>
+          <div class="partner-row reveal">
+            <div class="partner-num">06 / 06</div>
+            <div class="partner-logo-wrap">
+              <img src="https://z-cdn-media.chatglm.cn/files/3d72d46b-7fa5-434a-a633-984c0484e80b.png?auth_key=1884543402-5794346882d74f5793e1de5a606fe059-0-f5f23dae48caf252d04e2b631aed23fe" alt="Cisco Logo" class="partner-logo-img">
+            </div>
+            <p class="partner-desc-big" data-i18n="part_6_d">
+              Cisco Systems, American technology company, operating worldwide, that is best known for its computer networking products.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <section class="section" id="contact">
+      <div class="section-inner">
+        <div class="section-number reveal" data-i18n="contact_num">08 — Contact Us</div>
+        <h2 class="section-title reveal" data-i18n="contact_title">Contact <em>Us.</em></h2>
+        
+        <div class="contact-layout">
+          <div class="contact-left reveal">
+            <p class="contact-cta-text" data-i18n="contact_text">
+              Reach out to our team to discuss your <span>infrastructure</span>, <span>supply chain</span>, or <span>maintenance</span> needs. We're ready to help you build something reliable.
+            </p>
+            <a href="mailto:sales@axiabizsolutions.com" class="contact-email-btn">
+              <span data-i18n="contact_btn">Send an Email</span> <i class="fa-solid fa-arrow-right"></i>
+            </a>
+          </div>
+          
+          <div class="contact-info-stack reveal reveal-delay-1">
+            <div class="contact-block">
+              <div class="contact-block-label" data-i18n="contact_off_l">Office</div>
+              <div class="contact-block-value">
+                C-10-10, OASIS CORPORATE PARK,<br>
+                NO.2 JALAN PJU 1A/2,<br>
+                ARA DAMANSARA,<br>
+                47301 PETALING JAYA,<br>
+                SELANGOR DARUL EHSAN,<br>
+                MALAYSIA
+              </div>
+            </div>
+            
+            <div class="contact-block">
+              <div class="contact-block-label" data-i18n="contact_em_l">Email</div>
+              <div class="contact-block-value">
+                <a href="mailto:sales@axiabizsolutions.com">sales@axiabizsolutions.com</a>
+              </div>
+            </div>
+            
+            <div class="contact-block">
+              <div class="contact-block-label" data-i18n="contact_ph_l">Phone</div>
+              <div class="contact-block-value">
+                <a href="tel:+60376609266">+60 3-7660 9266</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <footer class="footer">
+      <div class="footer-inner">
+        <div class="footer-top">
+          <div>
+            <p class="footer-tagline" data-i18n="foot_tag">
+              We are committed to help your organization by utilizing our experience to fulfill our customer’s expectations.
+            </p>
+          </div>
+          <div>
+            <div class="footer-heading" data-i18n="foot_h1">Services</div>
+            <a href="#port" class="footer-link" data-i18n="nav_port">Port Solutions</a>
+            <a href="#supply" class="footer-link" data-i18n="nav_supply">Supply Chain</a>
+            <a href="#consultancy" class="footer-link" data-i18n="nav_consult">IT Consultancy</a>
+            <a href="#repair" class="footer-link" data-i18n="repair_title">Repair Services</a>
+            <a href="#maintenance" class="footer-link" data-i18n="maint_num">Maintenance</a>
+          </div>
+          <div>
+            <div class="footer-heading" data-i18n="nav_partners">Partners</div>
+            <a href="#partners" class="footer-link">RuggON</a>
+            <a href="#partners" class="footer-link">Point Mobile</a>
+            <a href="#partners" class="footer-link">Ubiquiti</a>
+            <a href="#partners" class="footer-link">Bosch</a>
+            <a href="#partners" class="footer-link">Tyco</a>
+            <a href="#partners" class="footer-link">Cisco</a>
+          </div>
+          <div>
+            <div class="footer-heading" data-i18n="foot_h3">Contact</div>
+            <a href="mailto:sales@axiabizsolutions.com" class="footer-link">sales@axiabizsolutions.com</a>
+            <a href="tel:+60376609266" class="footer-link">+60 3-7660 9266</a>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <div data-i18n="foot_c">© AXIA BUSINESS SOLUTIONS — ALL RIGHTS RESERVED</div>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    // ============== Language Dictionary ==============
+    // Note: "AXIA", "Business", and "Solutions." have been removed from the dictionary 
+    // and HTML data-i18n attributes in the hero title to ensure they never translate.
+    const translations = {
+      en: {
+        nav_about: "About", nav_port: "Port Solutions", nav_supply: "Supply Chain", nav_consult: "Consultancy", nav_partners: "Partners", nav_cta: "Get in touch",
+        hero_eyebrow: "AXIA BUSINESS SOLUTIONS — ENTERPRISE INTEGRATION",
+        hero_sub: "We are committed to help your organization by utilizing our experience to fulfill our customer’s expectations.",
+        marq_1: "Port Solutions", marq_2: "Outdoor Wireless", marq_3: "Warehouse Management", marq_4: "Supply Chain", marq_5: "IT Consultancy", marq_6: "Device Repair", marq_7: "Preventive Maintenance",
+        about_num: "01 — About Us", about_title: "About AXIA<br>Business <em>Solutions.</em>",
+        about_intro: "AXIA BUSINESS SOLUTIONS leverages an established network for a collaboration framework, put together by an <span>elite pool of enterprise solution professionals</span> who work with world-class technology partners.",
+        about_b1_t: "The Framework", about_b1_p: "This brings to the table tremendous insight and experience in fixed and wireless infrastructure setup, and business application implementation and development, as well as solution integration and other professional services.",
+        about_b2_t: "The Commitment", about_b2_p: "The success of any system integration and implementation is dependent on several critical factors, including project management, system design, testing, training, products and support. Axia Business Solutions is able to offer a complete and comprehensive system solution with support services through a single vendor source responsibility.",
+        about_b3_t: "The Environment", about_b3_p: "We have an experienced engineering team who are very familiar with Port working environment, which ensures that our system design is practical. In terms of providing a turnkey solution, our competence in design and implementation including the deployment of WiFi Handheld Terminal devices.",
+        port_num: "02 — Port Solutions", port_title: "Port <em>Solutions.</em>",
+        port_1_t: "Pre-Sales & Post Sales Site Survey", port_1_p: "<span class='text-lead'>Before we begin any project</span> we will conduct site survey, this allows us to gather information for a design or an estimation to complete the initial tasks required for an outdoor activity. After project completion, we will conduct survey as well to identify which area can be improvised, what are the users feedback or prevention task can be done.",
+        port_2_t: "Pole Installation", port_2_p: "<span class='text-lead'>We are experienced on providing client feedback</span> related pole usage based on their requirements and nature of work, in addition we also have experience on pole installation, where location of installation can be difference maker in some scenarios, such as signal coverage.",
+        port_3_t: "Cabling Design", port_3_p: "<span class='text-lead'>Cabling management is vital to business</span> as they allow you to keep systems running in optimal level, also reduce overall infrastructure costs. Furthermore, downtime can be reduced with proper cabling management because it will be easier for support team to troubleshoot.",
+        supply_num: "03 — Supply Chain Solutions", supply_title: "Supply Chain <em>Solutions.</em>",
+        supply_1_l: "Solution / 01", supply_1_t: "Warehouse Management System (WMS) Consultant", supply_1_p: "WMS can help businesses by <span class='text-highlight'>managing your housekeeping systematically</span> and improve employees working efficiency. Furthermore, WMS allows you to monitor your productivity via access to reports / analysis generated by the system.",
+        supply_2_l: "Solution / 02", supply_2_t: "Infrastructure (Hardware + Software)", supply_2_p: "We also provide our suggestion on which hardware and software to use that can fulfill your routine task based on your requirements, budget and working environment. This include support and guidance to <span class='text-highlight'>ensure staffs able to adapt new device or software</span>, also achieve smooth transition from previous device without affecting their productivity once user migrate to new framework.",
+        consult_num: "04 — IT Consultancy", consult_title: "IT <em>Consultancy.</em>",
+        consult_1_l: "Service / 01", consult_1_t: "Design, Project Management & Installation", consult_1_p: "We able to provide feedback to customers inquiry based on which industry is related to, such as <span class='text-highlight'>what features or improvements can be done</span> that will help their operations, in the meantime we also provide installation services to our customer.",
+        consult_2_l: "Service / 02", consult_2_t: "Maintenance Support", consult_2_p: "On site maintenance support is also available for customers when facing issues such as service disruption, hardware failure. <span class='text-highlight'>Preventive maintenance will be conducted throughout the year</span> to ensure operation runs smoothly and troubleshoot any issue before causing impact, minimizing downtime and critical issues.",
+        repair_num: "05 — Repair Services", repair_title: "Repair <em>Services.</em>",
+        repair_1_l: "Repair / Handheld", repair_1_t: "Handheld Device Repair Services", repair_1_p: "// We provide repair services for handheld devices such as MX7, MX9.",
+        repair_2_l: "Repair / Mounted", repair_2_t: "Mounted Device Repair Services", repair_2_p: "// We also experienced on repairing mounted device such as Ruggon MT7000, PX501 and Honeywell Thor VM1.",
+        maint_num: "06 — Maintenance", maint_title: "Preventive & <em>Corrective.</em>",
+        maint_1_l: "Preventive", maint_1_t: "Scheduled Preventive Maintenance", maint_1_p: "Any project was delivered will have preventive maintenance each year, number of times will be depends on size of the project. This exercise is to ensure all deployed devices / equipment are still in optimal working state. Any findings during the maintenance will be noted accordingly, any changes made will be notify to users.",
+        maint_2_l: "Corrective", maint_2_t: "Corrective Maintenance", maint_2_p: "We also provide corrective maintenance work, such as signal interference, weak signal strength issues. We will primarily focus on finding root cause, then do correction based on the findings and monitor if same issue persisted or not.",
+        part_num: "07 — Partners", part_title: "Our <em>Partners.</em>",
+        part_1_d: "RuggON is founded in 2014, a rugged computing solutions provider good at designing quality rugged tablets, vehicle mount computers, mobile data terminals, monitors, and data-capture peripherals and purpose-built accessories.",
+        part_2_d: "Founded in 2006, Point Mobile is one of the fastest growing enterprise handheld manufacturers in the world. We offer a full range of handheld mobile computers, rugged smartphones, LTE/Android integrated mobile payment devices, healthcare terminals, RFID readers and portable Bluetooth scanners.",
+        part_3_d: "Ubiquiti Inc. (formerly Ubiquiti Networks, Inc.) is an American technology company founded in San Jose, California, in 2005. Now based in New York City, Ubiquiti manufactures and sells wireless data communication and wired products for enterprises and homes.",
+        part_4_d: "We are constantly looking for new solutions to make buildings smarter and more efficient, such as air-conditioning and heating technology, as well as for video surveillance and fire protection.",
+        part_5_d: "Tyco International mission is to advance safety and security. We find smarter ways to save lives, improve businesses and protect where people live and work.",
+        part_6_d: "Cisco Systems, American technology company, operating worldwide, that is best known for its computer networking products.",
+        contact_num: "08 — Contact Us", contact_title: "Contact <em>Us.</em>",
+        contact_text: "Reach out to our team to discuss your <span>infrastructure</span>, <span>supply chain</span>, or <span>maintenance</span> needs. We're ready to help you build something reliable.",
+        contact_btn: "Send an Email", contact_off_l: "Office", contact_em_l: "Email", contact_ph_l: "Phone",
+        foot_tag: "We are committed to help your organization by utilizing our experience to fulfill our customer’s expectations.",
+        foot_h1: "Services", foot_h3: "Contact", foot_c: "© AXIA BUSINESS SOLUTIONS — ALL RIGHTS RESERVED"
+      },
+      zh: {
+        nav_about: "关于", nav_port: "港口解决方案", nav_supply: "供应链", nav_consult: "咨询服务", nav_partners: "合作伙伴", nav_cta: "联系我们",
+        hero_eyebrow: "AXIA BUSINESS SOLUTIONS — 企业集成",
+        hero_sub: "我们致力于利用我们的经验来满足客户的期望，从而帮助您的组织。",
+        marq_1: "港口解决方案", marq_2: "户外无线", marq_3: "仓库管理", marq_4: "供应链", marq_5: "IT咨询", marq_6: "设备维修", marq_7: "预防性维护",
+        about_num: "01 — 关于我们", about_title: "关于 AXIA<br>Business <em>Solutions.</em>",
+        about_intro: "AXIA BUSINESS SOLUTIONS 利用既定的网络建立协作框架，由与世界级技术合作伙伴合作的<span>精英企业解决方案专业人员团队</span>组成。",
+        about_b1_t: "框架体系", about_b1_p: "这为固定和无线基础设施设置、业务应用程序实施和开发以及解决方案集成和其他专业服务带来了巨大的洞察力和经验。",
+        about_b2_t: "服务承诺", about_b2_p: "任何系统集成和实施的成功都取决于几个关键因素，包括项目管理、系统设计、测试、培训、产品和支持。Axia Business Solutions 能够通过单一供应商来源责任提供完整、全面的系统解决方案和支持服务。",
+        about_b3_t: "工作环境", about_b3_p: "我们拥有一个非常熟悉港口工作环境的经验丰富的工程团队，这确保了我们的系统设计是实用的。在提供交钥匙解决方案方面，我们在设计和实施方面的能力包括部署 WiFi 手持终端设备。",
+        port_num: "02 — 港口解决方案", port_title: "港口 <em>解决方案。</em>",
+        port_1_t: "售前与售后现场勘察", port_1_p: "<span class='text-lead'>在开始任何项目之前</span>我们将进行现场勘察，这使我们能够收集信息，以进行设计或估算，完成户外活动所需的初始任务。项目完成后，我们也将进行勘察，以确定哪些区域可以改进，用户反馈是什么，或者可以采取哪些预防措施。",
+        port_2_t: "杆体安装", port_2_p: "<span class='text-lead'>我们在提供客户反馈方面经验丰富</span>，根据他们的要求和工作性质提供与杆体使用相关的反馈，此外我们也有杆体安装经验，在某些场景下，安装位置可能是决定性因素，例如信号覆盖。",
+        port_3_t: "布线设计", port_3_p: "<span class='text-lead'>布线管理对企业至关重要</span>，因为它们允许您保持系统在最佳水平运行，同时降低总体基础设施成本。此外，通过适当的布线管理可以减少停机时间，因为支持团队将更容易进行故障排除。",
+        supply_num: "03 — 供应链解决方案", supply_title: "供应链 <em>解决方案。</em>",
+        supply_1_l: "解决方案 / 01", supply_1_t: "仓库管理系统 (WMS) 顾问", supply_1_p: "WMS 可以通过<span class='text-highlight'>系统地管理您的内部事务</span>来帮助企业，并提高员工的工作效率。此外，WMS 允许您通过访问系统生成的报告/分析来监控您的生产力。",
+        supply_2_l: "解决方案 / 02", supply_2_t: "基础设施（硬件 + 软件）", supply_2_p: "我们还提供关于使用哪种硬件和软件的建议，以满足您基于要求、预算和工作环境的日常任务。这包括支持和指导，<span class='text-highlight'>以确保员工能够适应新设备或软件</span>，并在用户迁移到新框架后实现从先前设备的平滑过渡，而不影响其生产力。",
+        consult_num: "04 — IT 咨询", consult_title: "IT <em>咨询。</em>",
+        consult_1_l: "服务 / 01", consult_1_t: "设计、项目管理与安装", consult_1_p: "我们能够根据相关行业向客户查询提供反馈，例如<span class='text-highlight'>可以采取哪些功能或改进</span>来帮助其运营，同时我们还为客户提供安装服务。",
+        consult_2_l: "服务 / 02", consult_2_t: "维护支持", consult_2_p: "当客户面临服务中断、硬件故障等问题时，我们还提供现场维护支持。<span class='text-highlight'>全年将进行预防性维护</span>，以确保运营顺畅，并在产生影响之前排查任何问题，从而最大限度地减少停机时间和严重问题。",
+        repair_num: "05 — 维修服务", repair_title: "维修 <em>服务。</em>",
+        repair_1_l: "维修 / 手持设备", repair_1_t: "手持设备维修服务", repair_1_p: "// 我们提供手持设备的维修服务，例如 MX7、MX9。",
+        repair_2_l: "维修 / 车载设备", repair_2_t: "车载设备维修服务", repair_2_p: "// 我们在维修车载设备方面也经验丰富，例如 Ruggon MT7000、PX501 和 Honeywell Thor VM1。",
+        maint_num: "06 — 维护", maint_title: "预防性与 <em>纠正性。</em>",
+        maint_1_l: "预防性", maint_1_t: "计划内预防性维护", maint_1_p: "任何交付的项目每年都将进行预防性维护，次数取决于项目规模。此练习旨在确保所有部署的设备/设备仍处于最佳工作状态。维护期间的任何发现都将相应记录，所做的任何更改都将通知用户。",
+        maint_2_l: "纠正性", maint_2_t: "纠正性维护", maint_2_p: "我们还提供纠正性维护工作，例如信号干扰、信号强度弱等问题。我们将主要专注于寻找根本原因，然后根据发现进行纠正，并监控同一问题是否仍然存在。",
+        part_num: "07 — 合作伙伴", part_title: "我们的 <em>合作伙伴。</em>",
+        part_1_d: "RuggON 成立于2014年，是一家坚固型计算解决方案提供商，擅长设计高质量的坚固型平板电脑、车载电脑、移动数据终端、显示器和数据采集外设以及专用配件。",
+        part_2_d: "Point Mobile 成立于2006年，是全球增长最快的企业手持设备制造商之一。我们提供全系列的手持移动电脑、坚固型智能手机、LTE/Android集成移动支付设备、医疗终端、RFID读取器和便携式蓝牙扫描仪。",
+        part_3_d: "Ubiquiti Inc.（前身为 Ubiquiti Networks, Inc.）是一家美国技术公司，于2005年在加利福尼亚州圣何塞成立。Ubiquiti 现总部位于纽约市，制造并销售用于企业和家庭无线数据通信及有线产品。",
+        part_4_d: "我们不断寻找新的解决方案，使建筑更智能、更高效，例如空调和供暖技术，以及视频监控和消防保护。",
+        part_5_d: "Tyco International 的使命是推进安全和保障。我们寻找更智能的方法来拯救生命、改善业务并保护人们生活和工作的地方。",
+        part_6_d: "Cisco Systems，一家全球运营的美国技术公司，以其计算机网络产品而闻名。",
+        contact_num: "08 — 联系我们", contact_title: "联系 <em>我们。</em>",
+        contact_text: "联系我们的团队，讨论您的<span>基础设施</span>、<span>供应链</span>或<span>维护</span>需求。我们随时准备帮助您构建可靠的东西。",
+        contact_btn: "发送电子邮件", contact_off_l: "办公地址", contact_em_l: "邮箱", contact_ph_l: "电话",
+        foot_tag: "我们致力于利用我们的经验来满足客户的期望，从而帮助您的组织。",
+        foot_h1: "服务项目", foot_h3: "联系方式", foot_c: "© AXIA BUSINESS SOLUTIONS — 版权所有"
+      },
+      ms: {
+        nav_about: "Tentang", nav_port: "Penyelesaian Pelabuhan", nav_supply: "Rantai Bekalan", nav_consult: "Perundingan", nav_partners: "Rakan Kongsi", nav_cta: "Hubungi Kami",
+        hero_eyebrow: "AXIA BUSINESS SOLUTIONS — INTEGRASI PERUSAHAAN",
+        hero_sub: "Kami komited untuk membantu organisasi anda dengan menggunakan pengalaman kami untuk memenuhi jangkaan pelanggan kami.",
+        marq_1: "Penyelesaian Pelabuhan", marq_2: "Wayarles Luar", marq_3: "Pengurusan Gudang", marq_4: "Rantai Bekalan", marq_5: "Perundingan IT", marq_6: "Pembaikan Peranti", marq_7: "Penyelenggaraan Pencegahan",
+        about_num: "01 — Tentang Kami", about_title: "Tentang AXIA<br>Business <em>Solutions.</em>",
+        about_intro: "AXIA BUSINESS SOLUTIONS memanfaatkan rangkaian yang terbina untuk rangka kerja kerjasama, yang dihimpunkan oleh <span>kumpulan profesional penyelesaian perusahaan elit</span> yang bekerja dengan rakan kongsi teknologi kelas dunia.",
+        about_b1_t: "Rangka Kerja", about_b1_p: "Ini membawa kepada pemahaman dan pengalaman yang luar biasa dalam persediaan infrastruktur tetap dan wayarles, serta pelaksanaan dan pembangunan aplikasi perniagaan, serta integrasi penyelesaian dan perkhidmatan profesional lain.",
+        about_b2_t: "Komitmen", about_b2_p: "Kejayaan sebarang integrasi dan pelaksanaan sistem bergantung kepada beberapa faktor kritikal, termasuk pengurusan projek, reka bentuk sistem, ujian, latihan, produk dan sokongan. Axia Business Solutions mampu menawarkan penyelesaian sistem yang lengkap dan komprehensif dengan perkhidmatan sokongan melalui tanggungjawab sumber vendor tunggal.",
+        about_b3_t: "Persekitaran", about_b3_p: "Kami mempunyai pasukan kejuruteraan berpengalaman yang sangat biasa dengan persekitaran kerja Pelabuhan, yang memastikan reka bentuk sistem kami adalah praktikal. Dari segi penyediaan penyelesaian turnkey, kecekapan kami dalam reka bentuk dan pelaksanaan termasuk penggunaan peranti Terminal Tangan WiFi.",
+        port_num: "02 — Penyelesaian Pelabuhan", port_title: "Penyelesaian <em>Pelabuhan.</em>",
+        port_1_t: "Tinjauan Tapak Sebelum & Selepas Jualan", port_1_p: "<span class='text-lead'>Sebelum kita memulakan sebarang projek</span> kita akan menjalankan tinjauan tapak, ini membolehkan kita mengumpul maklumat untuk reka bentuk atau anggaran untuk menyelesaikan tugas awal yang diperlukan untuk aktiviti luar. Selepas projek selesai, kita juga akan menjalankan tinjauan untuk mengenal pasti kawasan mana yang boleh diperbaiki, apakah maklum balas pengguna atau tugas pencegahan yang boleh dilakukan.",
+        port_2_t: "Pemasangan Tiang", port_2_p: "<span class='text-lead'>Kami berpengalaman dalam memberikan maklum balas pelanggan</span> berkaitan penggunaan tiang berdasarkan keperluan dan sifat kerja mereka, selain itu kami juga mempunyai pengalaman dalam pemasangan tiang, di mana lokasi pemasangan boleh menjadi pencetus perbezaan dalam beberapa senario, seperti liputan isyarat.",
+        port_3_t: "Reka Bentuk Kabel", port_3_p: "<span class='text-lead'>Pengurusan kabel adalah penting bagi perniagaan</span> kerana ia membolehkan anda mengekalkan sistem berjalan pada tahap optimum, juga mengurangkan kos infrastruktur keseluruhan. Tambahan pula, masa henti boleh dikurangkan dengan pengurusan kabel yang betul kerana ia akan memudahkan pasukan sokongan untuk menyelesaikan masalah.",
+        supply_num: "03 — Penyelesaian Rantai Bekalan", supply_title: "Rantai Bekalan <em>Penyelesaian.</em>",
+        supply_1_l: "Penyelesaian / 01", supply_1_t: "Perunding Sistem Pengurusan Gudang (WMS)", supply_1_p: "WMS boleh membantu perniagaan dengan <span class='text-highlight'>menguruskan kerja pembersihan secara sistematik</span> dan meningkatkan kecekapan kerja pekerja. Tambahan pula, WMS membolehkan anda memantau produktiviti anda melalui akses kepada laporan / analisis yang dijana oleh sistem.",
+        supply_2_l: "Penyelesaian / 02", supply_2_t: "Infrastruktur (Perkakasan + Perisian)", supply_2_p: "Kami juga memberikan cadangan kami tentang perkakasan dan perisian yang boleh digunakan untuk memenuhi tugas harian anda berdasarkan keperluan, belanjawan dan persekitaran kerja anda. Ini termasuk sokongan dan bimbingan untuk <span class='text-highlight'>memastikan kakitangan dapat menyesuaikan diri dengan peranti atau perisian baharu</span>, juga mencapai peralihan yang lancar dari peranti sebelumnya tanpa menjejaskan produktiviti mereka setelah pengguna berhijrah ke rangka kerja baharu.",
+        consult_num: "04 — Perundingan IT", consult_title: "Perundingan <em>IT.</em>",
+        consult_1_l: "Perkhidmatan / 01", consult_1_t: "Reka Bentuk, Pengurusan Projek & Pemasangan", consult_1_p: "Kami dapat memberikan maklum balas kepada pertanyaan pelanggan berdasarkan industri yang berkaitan, seperti <span class='text-highlight'>apakah ciri atau penambahbaikan yang boleh dilakukan</span> yang akan membantu operasi mereka, pada masa yang sama kami juga menyediakan perkhidmatan pemasangan kepada pelanggan kami.",
+        consult_2_l: "Perkhidmatan / 02", consult_2_t: "Sokongan Penyelenggaraan", consult_2_p: "Sokongan penyelenggaraan di tapak juga tersedia untuk pelanggan apabila menghadapi masalah seperti gangguan perkhidmatan, kegagalan perkakasan. <span class='text-highlight'>Penyelenggaraan pencegahan akan dijalankan sepanjang tahun</span> untuk memastikan operasi berjalan lancar dan menyelesaikan sebarang masalah sebelum menyebabkan kesan, meminimumkan masa henti dan isu kritikal.",
+        repair_num: "05 — Servis Pembaikan", repair_title: "Servis <em>Pembaikan.</em>",
+        repair_1_l: "Pembaikan / Pegang Tangan", repair_1_t: "Servis Pembaikan Peranti Pegang Tangan", repair_1_p: "// Kami menyediakan servis pembaikan untuk peranti pegang tangan seperti MX7, MX9.",
+        repair_2_l: "Pembaikan / Terpasang", repair_2_t: "Servis Pembaikan Peranti Terpasang", repair_2_p: "// Kami juga berpengalaman dalam membaiki peranti terpasang seperti Ruggon MT7000, PX501 dan Honeywell Thor VM1.",
+        maint_num: "06 — Penyelenggaraan", maint_title: "Pencegahan & <em>Pembetulan.</em>",
+        maint_1_l: "Pencegahan", maint_1_t: "Penyelenggaraan Pencegahan Berjadual", maint_1_p: "Sebarang projek yang dihantar akan mempunyai penyelenggaraan pencegahan setiap tahun, bilangan kali akan bergantung pada saiz projek. Latihan ini adalah untuk memastikan semua peranti / peralatan yang digunakan masih dalam keadaan kerja yang optimum. Sebarang penemuan semasa penyelenggaraan akan direkodkan, sebarang perubahan yang dibuat akan dimaklumkan kepada pengguna.",
+        maint_2_l: "Pembetulan", maint_2_t: "Penyelenggaraan Pembetulan", maint_2_p: "Kami juga menyediakan kerja penyelenggaraan pembetulan, seperti gangguan isyarat, isu kekuatan isyarat lemah. Kami akan memberi tumpuan utama kepada mencari punca, kemudian membuat pembetulan berdasarkan penemuan dan memantau sama ada isu yang sama berterusan atau tidak.",
+        part_num: "07 — Rakan Kongsi", part_title: "Rakan Kongsi <em>Kami.</em>",
+        part_1_d: "RuggON ditubuhkan pada 2014, sebuah penyedia penyelesaian pengkomputeran tegar yang baik dalam mereka bentuk tablet tegar berkualiti, komputer kenderaan, terminal data mudah alih, monitor, dan periferal penangkapan data serta aksesori tujuan khas.",
+        part_2_d: "Ditubuhkan pada 2006, Point Mobile adalah salah satu pengilang peranti pegang tangan perusahaan yang paling pesat berkembang di dunia. Kami menawarkan julat penuh komputer mudah alih pegang tangan, telefon pintar tegar, peranti pembayaran mudah alih bersepadu LTE/Android, terminal penjagaan kesihatan, pembaca RFID dan pengimbas Bluetooth mudah alih.",
+        part_3_d: "Ubiquiti Inc. (dahulu Ubiquiti Networks, Inc.) ialah sebuah syarikat teknologi Amerika yang ditubuhkan di San Jose, California, pada 2005. Kini berpangkalan di Bandar Raya New York, Ubiquiti mengeluarkan dan menjual produk komunikasi data wayarles dan berwayar untuk perusahaan dan rumah.",
+        part_4_d: "Kami sentiasa mencari penyelesaian baharu untuk menjadikan bangunan lebih pintar dan cekap, seperti teknologi penghawa dingin dan pemanasan, serta untuk pengawasan video dan perlindungan kebakaran.",
+        part_5_d: "Misi Tyco International adalah untuk memajukan keselamatan dan keselamatan. Kami mencari cara yang lebih pintar untuk menyelamatkan nyawa, meningkatkan perniagaan dan melindungi tempat orang tinggal dan bekerja.",
+        part_6_d: "Cisco Systems, syarikat teknologi Amerika, beroperasi di seluruh dunia, yang paling terkenal dengan produk rangkaian komputernya.",
+        contact_num: "08 — Hubungi Kami", contact_title: "Hubungi <em>Kami.</em>",
+        contact_text: "Hubungi pasukan kami untuk membincangkan keperluan <span>infrastruktur</span>, <span>rantai bekalan</span>, atau <span>penyelenggaraan</span> anda. Kami sedia membantu anda membina sesuatu yang boleh dipercayai.",
+        contact_btn: "Hantar E-mel", contact_off_l: "Pejabat", contact_em_l: "E-mel", contact_ph_l: "Telefon",
+        foot_tag: "Kami komited untuk membantu organisasi anda dengan menggunakan pengalaman kami untuk memenuhi jangkaan pelanggan kami.",
+        foot_h1: "Perkhidmatan", foot_h3: "Hubungi", foot_c: "© AXIA BUSINESS SOLUTIONS — HAK CIPTA TERPELIHARA"
+      }
+    };
+
+    function setLanguage(lang) {
+      if (!translations[lang]) return;
+      document.documentElement.lang = lang;
+      document.querySelectorAll('[data-i18n]').forEach(element => {
+        const key = element.getAttribute('data-i18n');
+        if (translations[lang][key]) {
+          element.innerHTML = translations[lang][key];
+        }
+      });
+      // Update active class on buttons
+      document.querySelectorAll('.lang-btn').forEach(btn => {
+        btn.classList.remove('active');
+        if (btn.textContent.trim() === lang || (lang === 'en' && btn.textContent.trim() === 'EN') || (lang === 'zh' && btn.textContent.trim() === '中文') || (lang === 'ms' && btn.textContent.trim() === 'BM')) {
+          btn.classList.add('active');
+        }
+      });
+    }
+
+    // ============== Custom Cursor ==============
+    const cursorDot = document.getElementById('cursorDot');
+    const cursorOutline = document.getElementById('cursorOutline');
+    let mouseX = 0, mouseY = 0;
+    let outlineX = 0, outlineY = 0;
+    
+    document.addEventListener('mousemove', (e) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+      cursorDot.style.transform = `translate(${mouseX}px, ${mouseY}px) translate(-50%, -50%)`;
+    });
+    
+    function animateOutline() {
+      outlineX += (mouseX - outlineX) * 0.18;
+      outlineY += (mouseY - outlineY) * 0.18;
+      cursorOutline.style.transform = `translate(${outlineX}px, ${outlineY}px) translate(-50%, -50%)`;
+      requestAnimationFrame(animateOutline);
+    }
+    animateOutline();
+    
+    document.querySelectorAll('a, button, .service-card, .featured-card, .partner-card, .repair-card, .maint-card, .form-input, .form-textarea, .form-select, .side-nav-dot, .split-card').forEach(el => {
+      el.addEventListener('mouseenter', () => {
+        cursorOutline.classList.add('hover');
+        cursorDot.classList.add('hover');
+      });
+      el.addEventListener('mouseleave', () => {
+        cursorOutline.classList.remove('hover');
+        cursorDot.classList.remove('hover');
+      });
+    });
+    
+    // ============== Scroll Progress ==============
+    const scrollProgress = document.getElementById('scrollProgress');
+    window.addEventListener('scroll', () => {
+      const scrolled = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
+      scrollProgress.style.width = scrolled + '%';
+    });
+    
+    // ============== Nav Scrolled State ==============
+    const nav = document.getElementById('nav');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 50) nav.classList.add('scrolled');
+      else nav.classList.remove('scrolled');
+    });
+    
+    // ============== Side Nav Active Dot ==============
+    const sections = document.querySelectorAll('section[id]');
+    const sideNavDots = document.querySelectorAll('.side-nav-dot');
+    
+    const sectionObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const id = entry.target.id;
+          sideNavDots.forEach(dot => {
+            dot.classList.toggle('active', dot.getAttribute('data-section') === id);
+          });
+        }
+      });
+    }, { threshold: 0.35 });
+    
+    sections.forEach(section => sectionObserver.observe(section));
+    
+    // ============== Reveal on Scroll ==============
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -50px 0px' });
+    
+    document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+    
+    // ============== Global Network Canvas ==============
+    const canvas = document.getElementById('network');
+    const ctx = canvas.getContext('2d');
+    let nodes = [];
+    let mouse = { x: -1000, y: -1000 };
+    let canvasW = 0, canvasH = 0;
+    
+    function resizeCanvas() {
+      const dpr = window.devicePixelRatio || 1;
+      canvasW = window.innerWidth;
+      canvasH = window.innerHeight;
+      canvas.width = canvasW * dpr;
+      canvas.height = canvasH * dpr;
+      canvas.style.width = canvasW + 'px';
+      canvas.style.height = canvasH + 'px';
+      ctx.scale(dpr, dpr);
+      initNodes();
+    }
+    
+    function initNodes() {
+      nodes = [];
+      const isMobile = window.innerWidth < 768;
+      const divisor = isMobile ? 30000 : 18000;
+      const count = Math.min(isMobile ? 40 : 80, Math.floor((canvasW * canvasH) / divisor));
+      for (let i = 0; i < count; i++) {
+        nodes.push({
+          x: Math.random() * canvasW,
+          y: Math.random() * canvasH,
+          vx: (Math.random() - 0.5) * 0.35,
+          vy: (Math.random() - 0.5) * 0.35,
+          r: Math.random() * 1.8 + 0.8,
+          baseAlpha: Math.random() * 0.4 + 0.3
+        });
+      }
+    }
+    
+    function animateNetwork() {
+      ctx.clearRect(0, 0, canvasW, canvasH);
+      
+      nodes.forEach(n => {
+        n.x += n.vx;
+        n.y += n.vy;
+        if (n.x < 0 || n.x > canvasW) n.vx *= -1;
+        if (n.y < 0 || n.y > canvasH) n.vy *= -1;
+        n.x = Math.max(0, Math.min(canvasW, n.x));
+        n.y = Math.max(0, Math.min(canvasH, n.y));
+      });
+      
+      for (let i = 0; i < nodes.length; i++) {
+        for (let j = i + 1; j < nodes.length; j++) {
+          const dx = nodes[i].x - nodes[j].x;
+          const dy = nodes[i].y - nodes[j].y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < 140) {
+            const alpha = 0.18 * (1 - dist / 140);
+            ctx.beginPath();
+            ctx.moveTo(nodes[i].x, nodes[i].y);
+            ctx.lineTo(nodes[j].x, nodes[j].y);
+            ctx.strokeStyle = `rgba(10, 26, 53, ${alpha})`;
+            ctx.lineWidth = 0.6;
+            ctx.stroke();
+          }
+        }
+        
+        const dxm = nodes[i].x - mouse.x;
+        const dym = nodes[i].y - mouse.y;
+        const distM = Math.sqrt(dxm * dxm + dym * dym);
+        if (distM < 220) {
+          const alpha = 0.5 * (1 - distM / 220);
+          ctx.beginPath();
+          ctx.moveTo(nodes[i].x, nodes[i].y);
+          ctx.lineTo(mouse.x, mouse.y);
+          ctx.strokeStyle = `rgba(0, 82, 155, ${alpha})`; 
+          ctx.lineWidth = 0.9;
+          ctx.stroke();
+        }
+      }
+      
+      nodes.forEach(n => {
+        const dxm = n.x - mouse.x;
+        const dym = n.y - mouse.y;
+        const distM = Math.sqrt(dxm * dxm + dym * dym);
+        const isNear = distM < 220;
+        
+        ctx.beginPath();
+        ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
+        ctx.fillStyle = isNear 
+          ? `rgba(0, 82, 155, ${n.baseAlpha + 0.4})` 
+          : `rgba(10, 26, 53, ${n.baseAlpha})`;
+        ctx.fill();
+      });
+      
+      requestAnimationFrame(animateNetwork);
+    }
+    
+    window.addEventListener('mousemove', (e) => {
+      mouse.x = e.clientX;
+      mouse.y = e.clientY;
+    });
+    
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+    animateNetwork();
+    
+    // ============== Footer Year ==============
+    document.getElementById('year').textContent = new Date().getFullYear();
+    
+    // ============== Smooth Scroll for Anchor Links ==============
+    document.querySelectorAll('a[href^="#"]').forEach(link => {
+      link.addEventListener('click', (e) => {
+        const href = link.getAttribute('href');
+        if (href === '#') return;
+        const target = document.querySelector(href);
+        if (target) {
+          e.preventDefault();
+          const offset = 80;
+          const top = target.getBoundingClientRect().top + window.pageYOffset - offset;
+          window.scrollTo({ top, behavior: 'smooth' });
+        }
+      });
+    });
+    
+    // ============== Subtle parallax on hero title ==============
+    const heroTitle = document.querySelector('.hero-title');
+    const hero = document.getElementById('hero');
+    hero.addEventListener('mousemove', (e) => {
+      const rect = hero.getBoundingClientRect();
+      const x = (e.clientX - rect.left) / rect.width - 0.5;
+      const y = (e.clientY - rect.top) / rect.height - 0.5;
+      heroTitle.style.transform = `translate(${x * 12}px, ${y * 8}px)`;
+    });
+    hero.addEventListener('mouseleave', () => {
+      heroTitle.style.transform = 'translate(0, 0)';
+    });
+    heroTitle.style.transition = 'transform 0.5s cubic-bezier(0.4, 0, 0.2, 1)';
+  </script>
+</body>
+</html>
