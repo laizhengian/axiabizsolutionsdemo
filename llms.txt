@@ -1,0 +1,14 @@
+# AXIA Business Solutions
+
+AXIA Business Solutions is an enterprise IT company based in Petaling Jaya, Selangor, Malaysia, serving ports and warehouses. It designs, installs and maintains wireless and data infrastructure: pre- and post-sales site surveys, pole installation, cabling design, warehouse management system (WMS) consulting, hardware and software supply, IT consultancy, repairs for handheld and vehicle-mounted terminals (including Honeywell MX7/MX9, Ruggon MT7000, PX501 and Honeywell Thor VM1), and preventive and corrective maintenance. Partner brands include RuggON, Point Mobile, Ubiquiti, Bosch, Tyco and Cisco. The engineering team has direct port working-environment experience, including WiFi handheld terminal rollouts across live operations. AXIA positions itself as a single-vendor point of responsibility from design through support. Office: C-10-10, Oasis Corporate Park, No. 2, Jalan PJU 1A/2, Ara Damansara, 47301 Petaling Jaya, Selangor, Malaysia. Contact: sales@axiabizsolutions.com, +60 3-7660 9266. Site available in English, Chinese and Malay.
+
+## Pages
+- [Home](https://laizhengian.github.io/axiabizsolutionsdemo/): company overview, services, project workflow diagram, partners and contact details
+
+## Facts
+- Office: C-10-10, Oasis Corporate Park, No. 2, Jalan PJU 1A/2, Ara Damansara, 47301 Petaling Jaya, Selangor, Malaysia
+- Email: sales@axiabizsolutions.com
+- Phone: +60 3-7660 9266
+- Service area: Malaysia (ports and warehouses)
+- Languages: English, Chinese, Bahasa Malaysia
+- Pricing: quoted per project after site survey
