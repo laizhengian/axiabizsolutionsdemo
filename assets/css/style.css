@@ -8,6 +8,7 @@
   --ink-soft: #33475E;
   --muted: #5D6B80;
   --accent: #00529B;
+  --accent-bright: #2D7AB3;
   --line: rgba(10, 26, 53, 0.14);
   --line-light: rgba(237, 241, 247, 0.2);
   --font-display: "Chakra Petch", "Arial Narrow", sans-serif;
@@ -242,11 +243,12 @@ h1, h2, h3 { font-family: var(--font-display); line-height: 1.05; letter-spacing
   text-shadow: 0 2px 24px rgba(10, 26, 53, 0.5);
 }
 .hero h1 .block { display: block; }
-.hero h1 .block.blue { color: var(--accent); }
+.hero h1 .block.blue { color: var(--bg); }
 .hero h1 em {
   font-style: normal;
   font-weight: 700;
-  color: var(--bg);
+  color: var(--accent-bright);
+  text-shadow: 0 2px 14px rgba(10, 26, 53, 0.55);
 }
 .hero__sub b {
   font-family: var(--font-display);
@@ -319,6 +321,7 @@ h1, h2, h3 { font-family: var(--font-display); line-height: 1.05; letter-spacing
 .section { padding: clamp(3.5rem, 8vw, 5.5rem) var(--pad); border-top: 1px solid var(--line); }
 .section--card { background: var(--card); }
 .section--dark { background: var(--ink); color: var(--bg); }
+.section--dark .h2 em { color: var(--accent-bright); }
 .wrap { max-width: 1180px; margin: 0 auto; }
 
 .h2 {
